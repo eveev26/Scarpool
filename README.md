@@ -57,9 +57,39 @@ If you would like to set our project up on your local device, you can start by d
 
 ### Prerequisites
 
-Here is a list of npm stuff you will need. (Please look up the correct command if we got any of these wrong)
+Here is a list of npm stuff you will need. (Please look up the correct command if we got any of these wrong) Make sure to do these in the backend directory.
 npm install express
 npm install dotenv (if you also want to use environment variables)
-npm install node-fetch
+npm install node-fetch@2.6.1 (we are using an older version for our purposes)
+npm install mongodb
 
+### Installation
+To sum it up:
+1) Clone the repository
+2) Get the API keys and the URI from the links in "Getting Started" and replace them wherever we used the corresponding environment variable. If it is an API key, replace the whole "process.env.API_KEY" with your API key. If it is the URI, replace the whole "process.env.MONGO_URI" with your URI as well. Create your own .env file if you want. Look up "environment variables javascript" if you need help with that.
+3) That is it, I think. (At the time of writing this, we are not done yet) Go ahead and try out our app for yourself.
+   
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Usage
+
+Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+
+(At the time of writing this, we are not done yet)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Roadmap
+
+- [ ] Finish project
+- [ ] Finish Devpost + README
+- [ ] Clean up repository
+- [ ] Present after hacking time is over
+- [ ] Acknowledge that we may not go back to it but it was a good learning experience
+
+## Link to Devpost
+https://devpost.com/software/scarpool?ref_content=user-portfolio&ref_feature=in_progress
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+Thanks for checking this project out. We hope you enjoyed learning about this random idea we had. If there's anything we learned, it's that Google ALWAYS knows where we are. Have a good day.
