@@ -39,8 +39,6 @@ What our app provides:
 
 Given the nature of carpooling, we aim to reduce carbon emissions along with providing transport.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Built With
 
 ![mongodb](https://github.com/eveev26/Scarpool/assets/88058599/d3d88665-f149-4e2b-aee8-78a6897320eb)
