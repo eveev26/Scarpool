@@ -67,9 +67,13 @@ Replace our environment variables with your own API keys and URI.
 ### Prerequisites
 
 Here is a list of npm stuff you will need. (Please look up the correct command if we got any of these wrong) Make sure to do these in the backend directory.
+<br/>
 npm install express
+<br/>
 npm install dotenv (if you also want to use environment variables)
+<br/>
 npm install node-fetch@2.6.1 (we are using an older version for our purposes)
+<br/>
 npm install mongodb
 
 ### Installation
