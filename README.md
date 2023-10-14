@@ -1,7 +1,7 @@
 <a name="readme-top"></a>
 
 # Scarpool
-A mobile application created during the Hack the Valley 8 hackathon event at the University of Toronto Scarborough Campus.
+An IOS mobile application created during the Hack the Valley 8 hackathon event at the University of Toronto Scarborough Campus.
 Contributors: Ivy Chen, Andy Ma, Annie Wu, Ashley Wong
 
 <!-- TABLE OF CONTENTS -->
@@ -53,7 +53,8 @@ We used the MERN stack, pretty much.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Getting Started
-
+BEFORE ANYTHING: Please note our project is designed for IOS devices, and you will not be able to see the emulation on Windows computers.
+<br/>
 If you would like to set our project up on your local device, you can start by doing the usual git clone and stuff. After doing so, please note our project requires a couple of API keys: 
 <br/>
 -one from Google Cloud Services using the Javascript Maps API(https://developers.google.com/maps/documentation/javascript/overview)
