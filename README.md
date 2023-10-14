@@ -43,9 +43,9 @@ Given the nature of carpooling, we aim to reduce carbon emissions along with pro
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
-* [![React][React.js]][React-url]
-* [![Node][Node.js]][Node-url]
+![mongodb](https://github.com/eveev26/Scarpool/assets/88058599/d3d88665-f149-4e2b-aee8-78a6897320eb)
+![express](https://github.com/eveev26/Scarpool/assets/88058599/c3f6bc90-ac9b-4810-ad13-a4fbe81a55f1)
+![react](https://github.com/eveev26/Scarpool/assets/88058599/011915ba-d612-4a58-8ae1-7901be947031)
+![nodejs](https://github.com/eveev26/Scarpool/assets/88058599/7f7ca092-232c-479f-98eb-983b107ab833)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
