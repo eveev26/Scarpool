@@ -54,7 +54,15 @@ We used the MERN stack, pretty much.
 
 ## Getting Started
 
-If you would like to set our project up on your local device, you can start by doing the usual git clone and stuff. After doing so, please note our project requires a couple of API keys: one from Google Cloud Services using the Javascript Maps API(https://developers.google.com/maps/documentation/javascript/overview), one from the (very obscure) Geoapify API(https://www.geoapify.com/), and a URI from a MongoDB you will have to create(https://www.mongodb.com/). Replace our environment variables with your own API keys and URI. 
+If you would like to set our project up on your local device, you can start by doing the usual git clone and stuff. After doing so, please note our project requires a couple of API keys: 
+<br/>
+-one from Google Cloud Services using the Javascript Maps API(https://developers.google.com/maps/documentation/javascript/overview)
+<br/>
+-one from the (very obscure) Geoapify API(https://www.geoapify.com/)
+<br/>
+-and a URI from a MongoDB you will have to create(https://www.mongodb.com/).
+<br/>
+Replace our environment variables with your own API keys and URI. 
 
 ### Prerequisites
 
