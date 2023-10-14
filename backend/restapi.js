@@ -138,7 +138,6 @@ app.get("/:id", async (req, res) => {
 app.post("/", async (req, res) => {
   await client.connect();
   let latlon = getLatLon(req.body.address);
-  console.log((await latlon)[1].toString());
   res.json(
     await createListing(client, {
       name: req.body.name,
