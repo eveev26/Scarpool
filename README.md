@@ -34,7 +34,9 @@ Contributors: Ivy Chen, Andy Ma, Annie Wu, Ashley Wong
 Scarpool was created due to the fact that a lot of students at UTSC commute. We wanted to create a solution to help provide transportation exclusively for UTSC students.
 
 What our app provides:
+<br/>
 -a place for students requiring commute to search for carpools
+<br/>
 -a place for other students with transportation capabilities to advertise their carpools
 
 Given the nature of carpooling, we aim to reduce carbon emissions along with providing transport.
