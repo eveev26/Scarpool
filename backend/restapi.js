@@ -9,7 +9,7 @@ const apiKey = process.env.GEOAPIFY_API_KEY;
 
 const { MongoClient } = require("mongodb");
 var ObjectId = require("mongodb").ObjectId;
-const uri = "";
+const uri = process.env.MONGO_API_KEY;
 const client = new MongoClient(uri);
 
 app.use(express.json());
