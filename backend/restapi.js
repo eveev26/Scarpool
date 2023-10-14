@@ -137,12 +137,14 @@ app.get("/:id", async (req, res) => {
 // make a new driver
 app.post("/", async (req, res) => {
   await client.connect();
+  let latlon = getLatLon(req.body.address);
+  console.log((await latlon)[1].toString());
   res.json(
     await createListing(client, {
       name: req.body.name,
       address: req.body.address,
-      longitude: "",
-      latitude: "",
+      longitude: (await latlon)[1],
+      latitude: (await latlon)[0],
       email: req.body.email,
       phone: req.body.phone,
       car_description: req.body.car_description,
