@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import axios from 'axios';
 import { Avatar, Button, Card, Text, TextInput, Modal, Portal, PaperProvider, Dialog } from 'react-native-paper';
 import * as React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView , {Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+
 
 const baseurl = "";
 let numberOfCards = 2;
@@ -23,14 +24,46 @@ const Input = () => {
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
 
 const MyCard = (props) => {
+  const [dialogVisible, setDialogVisible] = React.useState(props.visible)
+  // const seeDetails = (props) => {<CardDialog cardDialogVisible={true} cardData={props.cardData}></CardDialog>}
+
   return (
-    <Card style={{ flex: 2, width: '150%' }}>
+    <Card style={{ flex: 2, width: '150%'}}>
       <Card.Content>
         <Text variant="bodyMedium">Location: {props.cardData.location}</Text>
         <Text variant="bodyMedium">Distance: {props.cardData.distance}</Text>
         <Text variant="bodyMedium">Start Time: {props.cardData.time}</Text>
         <Text variant="bodyMedium">Seats Left: {props.cardData.seats}</Text>
-        <Button onPress={props.seeDetails}>See Details</Button>
+        {
+
+        }
+        {
+          dialogVisible ? (
+            <>
+
+        <Text variant="bodyMedium">Location: {props.cardData.location}</Text>
+        <Text variant="bodyMedium">Distance: {props.cardData.distance}</Text>
+        <Text variant="bodyMedium">Start Time: {props.cardData.time}</Text>
+        <Text variant="bodyMedium">Seats Left: {props.cardData.seats}</Text>
+            </>
+          ) : (
+            <></>
+          )
+        }
+        {
+          dialogVisible ? (
+            <Button visible={dialogVisible} cardData={props.cardData} onPress={() => {setDialogVisible(false)}}>Close</Button>
+    
+          ) :
+          (
+
+            <Button visible={!dialogVisible} cardData={props.cardData} onPress={() => {setDialogVisible(true)}}>See Details</Button>
+          )
+        }
+
+
+        {
+        /* <CardDialog visible={dialogVisible} cardData={props.cardData} setVisibleFunc={setDialogVisible}></CardDialog> */}
       </Card.Content>
       <Card.Actions>
       </Card.Actions>
@@ -43,31 +76,55 @@ const MyCard = (props) => {
 const CardComponent = (props) => (
     <ScrollView style={{ backgroundColor: 'black', height: '99%', flex: 1, flexDirection: 'column'}}>
         {/* <Text>{"" + JSON.stringify(props.cardData[0])}</Text> */}
-        {props.cardData.map((v, i) => <MyCard key={i} cardData={props.cardData[i]}></MyCard>)}
+        {props.cardData.map((v, i) => <MyCard key={i} cardData={props.cardData[i]} visible={props.visible}></MyCard>)}
     </ScrollView>
   );
   
+  // const DialogMap = (props) => {
+  //   return (
+  //     <View style={styles.container}>
+  //        <MapView
+  //     style={styles.map} provider={PROVIDER_GOOGLE}
+  //     initialRegion={{
+  //       latitude: 37.78825, // Latitude of the initial map center
+  //       longitude: -122.4324, // Longitude of the initial map center
+  //       latitudeDelta: 0.0922, // Zoom level for latitude
+  //       longitudeDelta: 0.0421, // Zoom level for longitude
+  //     }}
+  //   >
+  //     <Marker
+  //       coordinate={{
+  //         latitude: 37.78825, // Latitude of the marker
+  //         longitude: -122.4324, // Longitude of the marker
+  //       }}
+  //       title="Marker Title"
+  //       description="Marker Description"
+  //     />
+  //   </MapView>
+  //     </View>
+  //   );
+  // };
 
   const CardDialog = (props) => {
-  
-    const showDialog = () => setVisible(true);
-  
-    const hideDialog = () => setVisible(false);
-    if(!props.visible)
-      return <></>
     return (
       <PaperProvider>
         <View>
-          <Button onPress={showDialog}>See Details</Button>
           <Portal>
-            <Dialog visible={visible} onDismiss={hideDialog} style={{alignSelf: "center", height: 500}}>
+            <Dialog visible={props.visible}  style={styles.dialog}>
               <Dialog.Content>
-              <Text variant="bodyMedium">This is simple dialog</Text>
-                <Text variant="bodyMedium">This is simple dialog</Text>
-                <Text variant="bodyMedium">This is simple dialog</Text>
+              <Text variant="bodyMedium">Location: {props.cardData.location}</Text>
+              <Text variant="bodyMedium">Distance: {props.cardData.distance}</Text>
+              <Text variant="bodyMedium">Start Time: {props.cardData.time}</Text>
+              <Text variant="bodyMedium">Seats Left: {props.cardData.seats}</Text>
+              <Text variant="bodyMedium">Seats Occupied: {props.cardData.seats}</Text>
+              <Text variant="bodyMedium">Email: {props.cardData.location}</Text>
+              <Text variant="bodyMedium">Phone: {props.cardData.distance}</Text>
+              <Text variant="bodyMedium">Car Description: {props.cardData.seats}</Text>
+              {/* <View><DialogMap cardData={props.cardData}></DialogMap></View> */}
               </Dialog.Content>
               <Dialog.Actions>
-                <Button onPress={hideDialog}>Done</Button>
+              <Button>Join</Button>
+                <Button onPress={()=>props.setVisibleFunc(false)}>Done</Button>
               </Dialog.Actions>
             </Dialog>
           </Portal>
@@ -75,8 +132,8 @@ const CardComponent = (props) => (
       </PaperProvider>
     );
   }
-export default function App() {
 
+export default function App() {
   const [cardDialogVisible, setCardDialogVisible] = React.useState(false);
 
   const [cardData, setCardData] = React.useState([
@@ -99,7 +156,8 @@ export default function App() {
       <View style={styles.inputContainer}>
       <Text style={styles.whiteText} variant="titleSmall">Location:</Text>
       <Input style={styles.input}></Input>
-
+      </View>
+      <View style={styles.inputContainer}>
       <Text style={styles.whiteText} variant="titleSmall">Time:</Text>
       <Input style={styles.input}></Input>
       </View>
@@ -107,8 +165,7 @@ export default function App() {
     Search
   </Button>
   <View style={styles.cardContainer}>
-    <CardDialog visible={false}></CardDialog>
-  <CardComponent cardData={cardData}/>
+  <CardComponent visible={false} cardData={cardData}/>
   </View>
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -125,7 +182,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    flex: 1,
+    flex: 0.9,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -149,5 +206,18 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'grey',
+  },
+  dialog: {
+    flex: 3,
+    flexDirection: 'column',
+    width: 330, height: 350,
+    alignSelf: 'stretch', height: 500, position: 'absolute' ,zIndex:999,
+  },
+  mapStyle: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
