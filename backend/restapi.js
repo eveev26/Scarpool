@@ -1,5 +1,7 @@
 var express = require("express");
 var app = express();
+const hostname = "0.0.0.0"; // Change this to your preferred hostname
+const port = 8080;
 
 //load and configure environment variables
 const dotenv = require("dotenv");
@@ -200,6 +202,6 @@ app.delete("/:id", async (req, res) => {
   res.json(await deleteListingById(client, req.params.id));
 });
 
-app.listen(8080, () => {
-  console.log("Server started on port 8080");
+app.listen(port, hostname, () => {
+  console.log(`Server started on http://${hostname}:${port}`);
 });
