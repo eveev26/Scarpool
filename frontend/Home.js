@@ -1,39 +1,70 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Avatar, Button, Card, Text, TextInput, Modal, Portal, PaperProvider, Dialog } from 'react-native-paper';
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView , {Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import axios from 'axios';
+import DiaMap from './DiaMap';
 
 
-const baseurl = "";
-let numberOfCards = 2;
+const baseurl = "https://043a-2607-fea8-5b40-21f-480a-6930-864e-ff44.ngrok.io";
+let userLat,userLong = 0;
 
-const Input = () => {
-  const [text, setText] = React.useState("");
-
-  return (
-    <TextInput
-      label=""
-      value={text}
-      onChangeText={text => setText(text)}
-    />
-  );
-};
 
 const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+
+function getDistanceBetweenCoordinates(lat1, lon1, lat2, lon2) {
+  // The radius of the Earth in kilometers
+  const earthRadius = 6371; // in kilometers
+
+  // Convert latitude and longitude from degrees to radians
+  const lat1Rad = (Math.PI * lat1) / 180;
+  const lon1Rad = (Math.PI * lon1) / 180;
+  const lat2Rad = (Math.PI * lat2) / 180;
+  const lon2Rad = (Math.PI * lon2) / 180;
+
+  // Haversine formula
+  const dLat = lat2Rad - lat1Rad;
+  const dLon = lon2Rad - lon1Rad;
+
+  const a =
+    Math.sin(dLat / 2) ** 2 + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  // Distance in kilometers
+  const distance = earthRadius * c;
+
+  return distance;
+}
+
 
 const MyCard = (props) => {
   const [dialogVisible, setDialogVisible] = React.useState(props.visible)
   // const seeDetails = (props) => {<CardDialog cardDialogVisible={true} cardData={props.cardData}></CardDialog>}
-
+  let distance= 0;
+  // console.log("uLat" + userLat);
+  // console.log(userLong);
+  // console.log(props.cardData.latitude);
+  // console.log(props.cardData.longitude);
+ if(props.userLoExist){
+  distance = getDistanceBetweenCoordinates(userLat, userLong, props.cardData.latitude, props.cardData.longitude)
+ }
+ 
   return (
-    <Card style={{ flex: 2, width: '150%'}}>
+    
+    <Card style={{ flex: 2, width: '100%'}}>
       <Card.Content>
-        <Text variant="bodyMedium">Location: {props.cardData.location}</Text>
-        <Text variant="bodyMedium">Distance: {props.cardData.distance}</Text>
-        <Text variant="bodyMedium">Start Time: {props.cardData.time}</Text>
-        <Text variant="bodyMedium">Seats Left: {props.cardData.seats}</Text>
+        <Text variant="bodyMedium">Location: {props.cardData.address}</Text>
+        {
+          props.userLoExist ? (
+            <Text variant="bodyMedium">Distance: {distance}</Text>
+          ) :     (
+            <></>
+          )
+        }
+        <Text variant="bodyMedium">Seats Left: {props.cardData.available_seats}</Text>
         {
 
         }
@@ -41,10 +72,11 @@ const MyCard = (props) => {
           dialogVisible ? (
             <>
 
-        <Text variant="bodyMedium">Location: {props.cardData.location}</Text>
-        <Text variant="bodyMedium">Distance: {props.cardData.distance}</Text>
+        <Text variant="bodyMedium">Phone: {props.cardData.location}</Text>
+        <Text variant="bodyMedium">Email: {props.cardData.email}</Text>
         <Text variant="bodyMedium">Start Time: {props.cardData.time}</Text>
-        <Text variant="bodyMedium">Seats Left: {props.cardData.seats}</Text>
+        <Text variant="bodyMedium">Car Type: {props.cardData.car_description}</Text>
+        <DiaMap longitude={props.cardData.longitude} latitude={props.cardData.latitude}></DiaMap>
             </>
           ) : (
             <></>
@@ -74,36 +106,14 @@ const MyCard = (props) => {
 };
 
 const CardComponent = (props) => (
-    <ScrollView style={{ backgroundColor: 'black', height: '99%', flex: 1, flexDirection: 'column'}}>
+    <ScrollView style={{ backgroundColor: 'black', height: '100%', flexDirection: 'column', flex: 2}}>
         {/* <Text>{"" + JSON.stringify(props.cardData[0])}</Text> */}
-        {props.cardData.map((v, i) => <MyCard key={i} cardData={props.cardData[i]} visible={props.visible}></MyCard>)}
+        {props.cardData.map((v, i) => <MyCard key={i} userLoExist={props.userLoExist} cardData={props.cardData[i]} visible={props.visible}></MyCard>)}
     </ScrollView>
   );
   
-  // const DialogMap = (props) => {
-  //   return (
-  //     <View style={styles.container}>
-  //        <MapView
-  //     style={styles.map} provider={PROVIDER_GOOGLE}
-  //     initialRegion={{
-  //       latitude: 37.78825, // Latitude of the initial map center
-  //       longitude: -122.4324, // Longitude of the initial map center
-  //       latitudeDelta: 0.0922, // Zoom level for latitude
-  //       longitudeDelta: 0.0421, // Zoom level for longitude
-  //     }}
-  //   >
-  //     <Marker
-  //       coordinate={{
-  //         latitude: 37.78825, // Latitude of the marker
-  //         longitude: -122.4324, // Longitude of the marker
-  //       }}
-  //       title="Marker Title"
-  //       description="Marker Description"
-  //     />
-  //   </MapView>
-  //     </View>
-  //   );
-  // };
+
+
 
   const CardDialog = (props) => {
     return (
@@ -133,41 +143,101 @@ const CardComponent = (props) => (
     );
   }
 
-export default function Home() {
-  const [cardDialogVisible, setCardDialogVisible] = React.useState(false);
 
+
+export default function Home() {
   const [cardData, setCardData] = React.useState([
-    {
-      location: "USTC",
-      distance: "2",
-      time: "2:00",
-      seats: 2,
-    },
-    {
-      location: "AAA",
-      distance: "4",
-      time: "6:00",
-      seats: 2,
-    }
+    // {
+    //   address: "USTC",
+    //   distance: "2",
+    //   time: "2:00",
+    //   seats: 2,
+    //   latitude: 37.78825,
+    //   longitude: -122.4324,
+    // },
+    // {
+    //   address: "AAA",
+    //   distance: "4",
+    //   time: "6:00",
+    //   seats: 2,
+    //   latitude: 37.78825,
+    //   longitude: -122.4324,
+    // },
+    // {
+    //   address: "USTC",
+    //   distance: "2",
+    //   time: "2:00",
+    //   seats: 2,
+    // },
+    // {
+    //   address: "AAA",
+    //   distance: "4",
+    //   time: "6:00",
+    //   seats: 2,
+    // }, {
+    //   address: "USTC",
+    //   distance: "2",
+    //   time: "2:00",
+    //   seats: 2,
+    // },
+    // {
+    //   address: "AAA",
+    //   distance: "4",
+    //   time: "6:00",
+    //   seats: 2,
+    // }, {
+    //   address: "USTC",
+    //   distance: "2",
+    //   time: "2:00",
+    //   seats: 2,
+    // },
+    // {
+    //   address: "AAA",
+    //   distance: "4",
+    //   time: "6:00",
+    //   seats: 2,
+    // }
   ])
+  const [cardDialogVisible, setCardDialogVisible] = React.useState(false);
+   React.useEffect(() => {
+     axios.get(baseurl).then(function (response){
+      console.log(':)');
+      console.log(':)');console.log(':)');
+      
+          console.log(Array.from(response.data));
+          setCardData(Array.from(response.data));
+        })
+
+  },[]);
+  const [userLocation,setUserLocation] = React.useState('');
+  const [userLoExist, setUserLoExist] = React.useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
       <Text style={styles.whiteText} variant="titleSmall">Location:</Text>
-      <Input style={styles.input}></Input>
+      <TextInput style={styles.input} onChangeText={setUserLocation} multiline={false}></TextInput>
       </View>
-      <View style={styles.inputContainer}>
-      <Text style={styles.whiteText} variant="titleSmall">Time:</Text>
-      <Input style={styles.input}></Input>
-      </View>
-      <Button style={styles.button} mode="contained" onPress={() => console.log(' Search Pressed')}>
+      <Button style={styles.button} mode="contained" onPress={() => {
+        setUserLoExist(true);
+        var loc = userLocation.replaceAll(" ", "%20");
+        loc = loc.replaceAll(",", "%2C");
+        console.log(222);
+        console.log(loc);
+        console.log(userLocation);
+        axios.get(baseurl+"/location/"+loc).then(function (response){
+          console.log(response.data);
+          userLat = response.data.latitude;
+          userLong = response.data.longitude;
+          console.log(userLat);
+          console.log(loc);
+          console.log(userLong);
+        })}}>
     Search
   </Button>
   <View style={styles.cardContainer}>
-  <CardComponent visible={false} cardData={cardData}/>
+  <CardComponent userLoExist={userLoExist} visible={false} cardData={cardData}/>
   </View>
-      <StatusBar style="auto" />
     </SafeAreaView>
     
   );
@@ -175,37 +245,38 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: 'black',
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   inputContainer: {
     flexDirection: 'row',
-    flex: 0.9,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   input: {
     backgroundColor: 'white',
-    flex: 1,
+    width: 200,
     flexDirection: 'row',
     borderWidth: 1,
     borderColor: 'gray',
-    padding: 5,
   },
   cardContainer: {
     backgroundColor: 'white',
-    flex: 3,
     flexDirection: 'row',
     alignItems: 'left',
+    flex: 1.5,
   },
   whiteText: {
     marginRight: 10,
     color: 'white', // Set text color to white
   },
   button: {
-    backgroundColor: 'grey',
+    alignItems: 'center',
+    backgroundColor: 'gray',
+    marginTop: 30,
+    marginBottom: 40,
+    marginLeft: 125,
+    marginRight: 125,
   },
   dialog: {
     flex: 3,
@@ -213,11 +284,9 @@ const styles = StyleSheet.create({
     width: 330, height: 350,
     alignSelf: 'stretch', height: 500, position: 'absolute' ,zIndex:999,
   },
-  mapStyle: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  map: {
+    ...StyleSheet.absoluteFillObject,
+    position: 'absolute'
   },
 });
+
