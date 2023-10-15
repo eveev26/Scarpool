@@ -24,7 +24,7 @@ const InputText = () => {
   );
 };
 
-export default function App() {
+export default function DriverInfo() {
   return (
     <View style={styles.main}>
       <ScrollView contentContainerStyle={styles.scrollViewStyle}></ScrollView>
