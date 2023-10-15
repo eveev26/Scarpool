@@ -1,5 +1,7 @@
 {
   "dependencies": {
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "expo": "^49.0.13",
+    "metro-core": "^0.79.1"
   }
 }
