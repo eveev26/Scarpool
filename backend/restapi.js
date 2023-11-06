@@ -139,18 +139,19 @@ app.get("/:id", async (req, res) => {
 // make a new driver
 app.post("/", async (req, res) => {
   await client.connect();
-  let latlon = getLatLon(req.body.address);
+  let latlon = getLatLon(req.body.location);
   res.json(
     await createListing(client, {
       name: req.body.name,
-      address: req.body.address,
+      location: req.body.location,
       longitude: (await latlon)[1],
       latitude: (await latlon)[0],
       email: req.body.email,
       phone: req.body.phone,
       car_description: req.body.car_description,
       available_seats: req.body.available_seats,
-      occupied_seats: req.body.occupied_seats,
+      occupied_seats: 0,
+      license_plate: req.body.license_plate,
       time: req.body.time,
     })
   );
@@ -205,3 +206,10 @@ app.delete("/:id", async (req, res) => {
 app.listen(port, hostname, () => {
   console.log(`Server started on http://${hostname}:${port}`);
 });
+
+// give latitude and longitude
+app.get("/location/:id", async (req, res) => {
+  let latlon = getLatLon(req.params.id);
+  res.json({longitude: (await latlon)[1],
+      latitude: (await latlon)[0],})
+})

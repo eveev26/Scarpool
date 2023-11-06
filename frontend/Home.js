@@ -8,7 +8,7 @@ import axios from 'axios';
 import DiaMap from './DiaMap';
 
 
-const baseurl = "https://043a-2607-fea8-5b40-21f-480a-6930-864e-ff44.ngrok.io";
+const baseurl = "https://ea30-2606-fa00-8a0-700-70c5-7794-4a-7bcf.ngrok.io/";
 let userLat,userLong = 0;
 
 
@@ -51,6 +51,8 @@ const MyCard = (props) => {
  if(props.userLoExist){
   distance = getDistanceBetweenCoordinates(userLat, userLong, props.cardData.latitude, props.cardData.longitude)
  }
+ const [refresh, setRefresh] = useState(false);
+ const [occup, setOccup] = useState(props.cardData.occupied_seats);
  
   return (
     
@@ -64,7 +66,15 @@ const MyCard = (props) => {
             <></>
           )
         }
-        <Text variant="bodyMedium">Seats Left: {props.cardData.available_seats}</Text>
+        {
+          refresh ? (
+
+            <Text variant="bodyMedium">Seats Left: {occup}/{props.cardData.available_seats}</Text>
+          ) : (
+            <Text variant="bodyMedium">Seats Left: {props.cardData.occupied_seats}/{props.cardData.available_seats}</Text>
+          )
+        }
+        
         {
 
         }
@@ -72,11 +82,22 @@ const MyCard = (props) => {
           dialogVisible ? (
             <>
 
-        <Text variant="bodyMedium">Phone: {props.cardData.location}</Text>
+        <Text variant="bodyMedium">Name: {props.cardData.name}</Text>
+        <Text variant="bodyMedium">Phone: {props.cardData.phone}</Text>
         <Text variant="bodyMedium">Email: {props.cardData.email}</Text>
         <Text variant="bodyMedium">Start Time: {props.cardData.time}</Text>
         <Text variant="bodyMedium">Car Type: {props.cardData.car_description}</Text>
         <DiaMap longitude={props.cardData.longitude} latitude={props.cardData.latitude}></DiaMap>
+        <Button onPress={() => {
+          console.log(props.cardData._id);
+          if (occup<props.cardData.available_seats){
+            axios.patch(baseurl+"add/"+ props.cardData._id)
+          .then(response => console.log('sent'));
+          setRefresh(true);
+          setOccup(occup+1);
+          }
+      }}
+        >Join Car Ride</Button>
             </>
           ) : (
             <></>
@@ -225,7 +246,7 @@ export default function Home() {
         console.log(222);
         console.log(loc);
         console.log(userLocation);
-        axios.get(baseurl+"/location/"+loc).then(function (response){
+        axios.get(baseurl+"location/"+loc).then(function (response){
           console.log(response.data);
           userLat = response.data.latitude;
           userLong = response.data.longitude;
