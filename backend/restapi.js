@@ -150,7 +150,7 @@ app.post("/", async (req, res) => {
       phone: req.body.phone,
       car_description: req.body.car_description,
       available_seats: req.body.available_seats,
-      occupied_seats: req.body.occupied_seats,
+      occupied_seats: 0,
       time: req.body.time,
     })
   );
@@ -205,3 +205,10 @@ app.delete("/:id", async (req, res) => {
 app.listen(port, hostname, () => {
   console.log(`Server started on http://${hostname}:${port}`);
 });
+
+// give latitude and longitude
+app.get("/location/:id", async (req, res) => {
+    let latlon = getLatLon(req.params.id);
+    res.json({longitude: (await latlon)[1],
+        latitude: (await latlon)[0],})
+})
